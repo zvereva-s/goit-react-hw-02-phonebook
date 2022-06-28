@@ -1,25 +1,22 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import styles from './contactForm.module.css';
 
 class ContactForm extends Component { 
-
   state = {
     name: '',
     number: '',
   }
-
   handleChangeInput = e => {
     const { value, name } = e.target;
     this.setState({ [name]: value, });
   };
   handleSubmit = (e) => {
     e.preventDefault();
-
     this.props.onSubmit(this.state);
     this.reset();
   }
-
   reset = () => {
     this.setState({
       name: '',
@@ -27,9 +24,7 @@ class ContactForm extends Component {
     })
   }
   render() {
-
     const { name, number } = this.state;
-
     return (
     <div className={styles.wrapper}>
       <form className={styles.form} onSubmit={this.handleSubmit}>
@@ -64,6 +59,12 @@ class ContactForm extends Component {
     </div>
   );
   }
+}
+ContactForm.defaultProps = {
+  onSubmit: ()=>{},
+}
+ContactForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
 }
 
 export default ContactForm;

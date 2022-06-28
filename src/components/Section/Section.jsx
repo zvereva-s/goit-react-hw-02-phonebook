@@ -11,11 +11,8 @@ function Section({ title, children }) {
 }
 
 Section.propTypes = {
-  title: PropTypes.string,
-  children: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.array,
-  ]),
+  title: PropTypes.string.isRequired,
+  children: PropTypes.node,
 };
 
 

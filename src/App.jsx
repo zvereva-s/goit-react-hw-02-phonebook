@@ -1,4 +1,5 @@
 import { Component } from 'react';
+
 import Section from 'components/Section';
 import ContactForm from 'components/ContactForm';
 import Filter from 'components/Filter';
@@ -6,6 +7,10 @@ import ContactList from 'components/ContactList';
 import { nanoid } from 'nanoid';
 
 class App extends Component {
+  static defaultProps = {
+    contacts: [],
+  } 
+
   state = {
     contacts: [
       { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
@@ -24,8 +29,10 @@ class App extends Component {
 
     if (sameName) {
       alert(`${name} is already in contacts.`);
-    } else {
-      contact = { id: nanoid(3), ...data };
+      return
+    }
+    else {
+      contact = { id: nanoid(), ...data };
     }
 
     this.setState(prevState => ({
@@ -38,22 +45,26 @@ class App extends Component {
       filter: value,
     })
     }
-  getFilteredContacts(value) {
-    const { contacts } = this.state;
+  getFilteredContacts() {
+    const { filter, contacts } = this.state;
+    
+    if (!filter) {
+      return contacts
+    }
     return contacts.filter(({name}) =>
-      name.toLowerCase().includes(value.toLowerCase())
+      name.toLowerCase().includes(filter.toLowerCase())
     );
   }
-  handleDelete = id=> {
+  removeContact = id=> {
     this.setState(prevState => ({
       contacts: prevState.contacts.filter(el => el.id !== id),  
     }));
   }
 
   render() {
-    const { contacts, filter } = this.state;
-    const { handelFormSubmit, handleFilterData, handleDelete } = this;
-    const filtredContacts = this.getFilteredContacts(filter);
+    
+    const { handelFormSubmit, handleFilterData, removeContact } = this;
+    const filtredContacts = this.getFilteredContacts();
 
 
     return (
@@ -66,8 +77,7 @@ class App extends Component {
             title="Find contacts by name"
             filter={handleFilterData}
           />
-          {filtredContacts.length !== 0 ? <ContactList contacts={filtredContacts} onClick={handleDelete} />  : <ContactList contacts={contacts} onClick={handleDelete}/>}
-          
+          <ContactList contacts={filtredContacts} onClick={removeContact} />          
         </Section>
       </>
     );
