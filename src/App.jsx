@@ -7,9 +7,6 @@ import ContactList from 'components/ContactList';
 import { nanoid } from 'nanoid';
 
 class App extends Component {
-  static defaultProps = {
-    contacts: [],
-  } 
 
   state = {
     contacts: [
@@ -25,18 +22,9 @@ class App extends Component {
     const { name } = data;
     const { contacts } = this.state;
     const sameName = contacts.some(el => el.name === name);
-    let contact = {};
-
-    if (sameName) {
-      alert(`${name} is already in contacts.`);
-      return
-    }
-    else {
-      contact = { id: nanoid(), ...data };
-    }
-
-    this.setState(prevState => ({
-      contacts: [...prevState.contacts, contact],
+    
+    sameName ? alert(`${name} is already in contacts.`) : this.setState(prevState => ({
+      contacts: [...prevState.contacts, { id: nanoid(), ...data }],
     }));
   };
   handleFilterData = e => {
